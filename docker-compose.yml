@@ -1,0 +1,36 @@
+version: '3.9'
+services:
+  nodejs-server:
+    build: 
+      context: ./
+      dockerfile: ./dockerfile/node/Dockerfile
+    ports:
+      - "8080:8080"
+    container_name: nodeserver
+    volumes:
+      - ./:/app
+    environment:
+      - CHOKIDAR_USEPOLLING=true 
+    networks:
+      myblog-dev:
+        ipv4_address: 192.168.2.2
+    entrypoint: ["/bin/sh", "-c" , "npm install && npm run dev"]
+  nginx:
+    build: 
+      context: ./
+      dockerfile: ./dockerfile/nginx/Dockerfile
+    ports:
+      - "80:80"
+    container_name: nginx
+    volumes:
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d/
+    networks:
+      myblog-dev:
+        ipv4_address: 192.168.2.3
+networks:
+  myblog-dev:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
