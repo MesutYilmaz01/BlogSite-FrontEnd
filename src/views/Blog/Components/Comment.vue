@@ -4,17 +4,17 @@ import Comment from './Comment.vue';
 <template>
     <li class="comment">
         <div class="vcard">
-            <img :src="[data.img]" alt="Image placeholder">
+            <!-- <img :src="[data.img]" alt="Image placeholder">-->
         </div>
         <div class="comment-body">
-            <h3>{{ data.name }}</h3>
+            <h3>{{ data.name_surname }}</h3>
             <div class="meta">{{ data.date}}</div>
             <p>{{ data.comment }}</p>
             <p><a href="#" class="reply rounded">Reply</a></p>
         </div>
-        <ul class="children" v-if="data.subcomments" v-for="subcomments in data.subcomments">
-            <Comment :data="subcomments" />
-    </ul>
+        <ul class="children" v-if="data.sub_comment" v-for="sub_comment in data.sub_comment">
+            <Comment :data="sub_comment" />
+        </ul>
     </li>
 </template>
 

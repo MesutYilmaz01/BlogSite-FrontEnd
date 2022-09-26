@@ -1,7 +1,6 @@
 <script setup>
 import RectanglePost from "../../../components/Common/Components/RectanglePost.vue";
 import RightMenu from "../../../components/Common/RightMenu.vue";
-
 </script>
 
 <template>
@@ -35,80 +34,22 @@ import RightMenu from "../../../components/Common/RightMenu.vue";
   export default {
     data() {
         return {
-            posts: [
-                {
-                    link: "asdasd.com",
-                    titleImg: "images/img_6.jpg",
-                    authorImg: "images/img_6.jpg",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3
-                },
-                {
-                    link: "asdasd.com",
-                    titleImg: "images/img_6.jpg",
-                    authorImg: "images/img_6.jpg",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3
-                },
-                {
-                    link: "asdasd.com",
-                    titleImg: "images/img_6.jpg",
-                    authorImg: "images/img_6.jpg",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3
-                },
-                {
-                    link: "asdasd.com",
-                    titleImg: "images/img_6.jpg",
-                    authorImg: "images/img_6.jpg",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3
-                },
-                {
-                    link: "asdasd.com",
-                    titleImg: "images/img_6.jpg",
-                    authorImg: "images/img_6.jpg",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3
-                },
-                {
-                    link: "asdasd.com",
-                    titleImg: "images/img_6.jpg",
-                    authorImg: "images/img_6.jpg",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3
-                },
-            ],
-            title: 'Latest Posts'
+            posts: [],
+            title: 'Latest Posts',
+            counter: 0,
+            showLoader: false
         }
     },
     methods: {
         scrollTrigger() {
-            //this.post = this.getPosts;
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if(entry.intersectionRatio > 0 ) {
                         this.showLoader = true;
-                        this.posts = this.posts.concat( [{
-                            link: "asdasd.com",
-                            author: "Mesut Yılmaz - ",
-                            title: "How to Find the Video Games of Your Youth",
-                            date: "March 15, 2018",
-                            commentCount: this.posts.length,
-                            img: "images/img_6.jpg",
-                        }])
+                        this.axios
+                        .get('http://myblog.test:90/api/posts/'+this.counter)
+                        .then(response => this.posts = this.posts.concat(response.data.data))
+                        this.counter+=10
                         setTimeout( () => {
                             this.showLoader = false;
                         }, 2000)

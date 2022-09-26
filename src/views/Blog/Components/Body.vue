@@ -6,15 +6,15 @@ import RightMenu from '../../../components/Common/RightMenu.vue';
 </script>
 
 <template>
-    <div class="container">
+    <div v-if="this.show" class="container">
         <div class="row blog-entries element-animate fadeInUp element-animated">
             <div class="col-md-12 col-lg-8 main-content">
                 <img src="images/img_10.jpg" alt="Image" class="img-fluid mb-5" />
                 <div class="post-meta">
                     <span class="author mr-2"><img src="images/person_1.jpg" alt="Colorlib" class="mr-2"> Colorlib</span>•
-                    <span class="mr-2">March 15, 2018 </span> •
-                    <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                    <h1 class="mb-4">There’s a Cool New Way for Men to Wear Socks and Sandals</h1>
+                    <span class="mr-2"> {{this.post.date}} </span> •
+                    <span class="ml-2"><span class="fa fa-comments"></span> {{this.post.commentCount}}</span>
+                    <h1 class="mb-4"> {{ this.post.title }} </h1>
                     <a class="category mb-5" href="#">Food</a>
                     <a class="category mb-5" href="#">Food</a>
                     <div class="post-content-body">
@@ -43,7 +43,7 @@ import RightMenu from '../../../components/Common/RightMenu.vue';
                         <p>Categories:  <a href="#">Food</a>, <a href="#">Travel</a>  Tags: <a href="#">#manila</a>, <a href="#">#asia</a></p>
                     </div>
                     <div class="pt-5">
-              <h3 class="mb-5">6 Comments</h3>
+              <h3 class="mb-5">{{comment_title}}</h3>
               <ul class="comment-list">
                 <div v-for="comment in comments">
                   <Comment :data="comment" />
@@ -64,8 +64,11 @@ import RightMenu from '../../../components/Common/RightMenu.vue';
   export default {
     data() {
         return {
+            show: false,
             temp: null,
+            post: null,
             title : "Hi There! I'm Craig David",
+            comment_title : '',
             content : "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum minima eveniet recusandae suscipit eum laboriosam fugit amet deleniti iste et. Ad dolores, necessitatibus non saepe tenetur impedit commodi quibusdam natus repellat, exercitationem accusantium perferendis officiis. Laboriosam impedit quia minus pariatur!</p>",
             img : "images/img_6.jpg",
             posts: [
@@ -112,75 +115,21 @@ import RightMenu from '../../../components/Common/RightMenu.vue';
                 
             ],
 
-            comments: [
-              {
-                name: 'Jhon Doe',
-                date: 'January 9, 2018 at 2:21pm',
-                comment: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?',
-                img: 'image',
-                subcomments: null
-              },
-              {
-                name: 'Jhon Doe',
-                date: 'January 9, 2018 at 2:21pm',
-                comment: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?',
-                img: 'image',
-                subcomments: [
-                  {
-                    name: 'Jhon Doe',
-                    date: 'January 9, 2018 at 2:21pm',
-                    comment: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?',
-                    img: 'image',
-                    subcomments: null
-                  },
-                  {
-                    name: 'Jhon Doe',
-                    date: 'January 9, 2018 at 2:21pm',
-                    comment: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?',
-                    img: 'image',
-                    subcomments: null
-                  },
-                ]
-              },
-              {
-                name: 'Jhon Doe',
-                date: 'January 9, 2018 at 2:21pm',
-                comment: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?',
-                img: 'image',
-                subcomments: [
-                  {
-                    name: 'Jhon Doe',
-                    date: 'January 9, 2018 at 2:21pm',
-                    comment: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?',
-                    img: 'image',
-                    subcomments: [
-                    {
-                      name: 'Jhon Doe',
-                      date: 'January 9, 2018 at 2:21pm',
-                      comment: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?',
-                      img: 'image',
-                      subcomments: null
-                    },
-                    {
-                      name: 'Jhon Doe',
-                      date: 'January 9, 2018 at 2:21pm',
-                      comment: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?',
-                      img: 'image',
-                      subcomments: null
-                    },
-                  ]
-                  },
-                  {
-                    name: 'Jhon Doe',
-                    date: 'January 9, 2018 at 2:21pm',
-                    comment: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?',
-                    img: 'image',
-                    subcomments: null
-                  },
-                ]
-              }
-            ]
+            comments: []
         }
+    },
+    created () {
+    this.getDatas().then((result) => {
+            this.post = result.data.data
+            this.comments = this.post.comments
+            this.comment_title= this.post.commentCount+' Comments',
+            this.show = true
+        })
+    },
+    methods : {
+      getDatas () {
+          return this.axios.get('http://myblog.test:90/api/post/'+this.$route.params.slug)
+      }
     }
 }
 

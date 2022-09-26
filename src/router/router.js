@@ -22,7 +22,7 @@ const routes = [
     component: () => import("@/views/Category/Index.vue"),
   },
   {
-    path: "/blog",
+    path: "/blog/:slug",
     name: "blog",
     component: () => import("@/views/Blog/Index.vue"),
   },
