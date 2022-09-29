@@ -14,7 +14,8 @@ import RightMenu from "../../../components/Common/RightMenu.vue";
             <div class="row blog-entries">
                 <div class="col-md-12 col-lg-8 main-content">
                     <div class="row">
-                        <div class="col-md-6" v-for="item in posts">
+                        <h2 v-if="isEmptyPost">{{emptyPost}}</h2>
+                        <div class="col-md-6" v-if="posts.length !== 0" v-for="item in posts">
                             <RectanglePost :data="item" />
                         </div>
                          <!--Loading circle-->
@@ -37,22 +38,29 @@ import RightMenu from "../../../components/Common/RightMenu.vue";
             posts: [],
             title: 'Latest Posts',
             counter: 0,
-            showLoader: false
+            showLoader: false,
+            isEmptyPost: false,
+            emptyPost: 'Henüz hiçbir yazı yazılmamış.'
         }
     },
     methods: {
         scrollTrigger() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if(entry.intersectionRatio > 0 ) {
+                    if(this.counter <= this.posts.length) {
+                        if(entry.intersectionRatio > 0 ) {
                         this.showLoader = true;
                         this.axios
                         .get('http://myblog.test:90/api/posts/'+this.counter)
-                        .then(response => this.posts = this.posts.concat(response.data.data))
-                        this.counter+=10
-                        setTimeout( () => {
-                            this.showLoader = false;
-                        }, 2000)
+                        .then(
+                            (response) => {
+                                this.posts = this.posts.concat(response.data.data)
+                            this.counter+=10
+                            this.showLoader = false
+                            this.isEmptyPost = this.posts.length === 0 ? true : false
+                            }
+                            )
+                    }
                     }
                 })
             })

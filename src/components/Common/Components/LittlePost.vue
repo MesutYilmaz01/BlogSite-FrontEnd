@@ -1,5 +1,5 @@
 <template>
-    <a href="">
+    <router-link v-if="data.slug" :to="{name:'blog', params:{slug: data.slug}}">
         <img :src="[img]" alt="Image placeholder" class="mr-4">
         <div class="text">
             <h4>{{data.title}}</h4>
@@ -10,9 +10,8 @@
             <div class="post-meta" v-else="data.comment">
                 <span class="mr-2">{{data.date}} </span>
             </div>
-
         </div>
-    </a>
+    </router-link>
 </template>
 
 <script>

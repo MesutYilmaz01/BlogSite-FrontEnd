@@ -20,6 +20,6 @@ import LittlePostRight from '../Components/LittlePost.vue';
  export default {
         props: {
             posts: Object
-        },
+        }
 }
 </script>

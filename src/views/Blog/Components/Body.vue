@@ -45,7 +45,7 @@ import RightMenu from '../../../components/Common/RightMenu.vue';
                     <div class="pt-5">
               <h3 class="mb-5">{{comment_title}}</h3>
               <ul class="comment-list">
-                <div v-for="comment in comments">
+                <div v-if="comments.length !== 0" v-for="comment in comments">
                   <Comment :data="comment" />
                 </div>
               </ul>
@@ -71,50 +71,6 @@ import RightMenu from '../../../components/Common/RightMenu.vue';
             comment_title : '',
             content : "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum minima eveniet recusandae suscipit eum laboriosam fugit amet deleniti iste et. Ad dolores, necessitatibus non saepe tenetur impedit commodi quibusdam natus repellat, exercitationem accusantium perferendis officiis. Laboriosam impedit quia minus pariatur!</p>",
             img : "images/img_6.jpg",
-            posts: [
-                {
-                    link: "asdasd.com",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3,
-                    img: "images/img_6.jpg",
-                },
-                {
-                    link: "asdasd.com",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3,
-                    img: "images/img_6.jpg",
-                },
-                {
-                    link: "asdasd.com",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3,
-                    img: "images/img_6.jpg",
-                },
-                {
-                    link: "asdasd.com",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3,
-                    img: "images/img_6.jpg",
-                },
-                {
-                    link: "asdasd.com",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3,
-                    img: "images/img_6.jpg",
-                },
-                
-            ],
-
             comments: []
         }
     },
@@ -122,13 +78,20 @@ import RightMenu from '../../../components/Common/RightMenu.vue';
     this.getDatas().then((result) => {
             this.post = result.data.data
             this.comments = this.post.comments
-            this.comment_title= this.post.commentCount+' Comments',
+            this.comment_title= this.post.commentCount === 0 ? 'Bu yazıya henüz yorum yapılmamış' : this.post.commentCount+' Comments',
             this.show = true
+        })
+    this.getPosts().then((result) => {
+        this.posts = result.data.data
         })
     },
     methods : {
       getDatas () {
           return this.axios.get('http://myblog.test:90/api/post/'+this.$route.params.slug)
+      },
+      getPosts () {
+        return this.axios.get('http://myblog.test:90/api/popular-posts')
+
       }
     }
 }

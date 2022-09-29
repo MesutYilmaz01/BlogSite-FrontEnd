@@ -6,7 +6,7 @@ import Social from './Social.vue';
 <template>
     <div class="col-md-6 ml-auto">
         <div class="row">
-            <LatestPost :items="posts"/>
+            <LatestPost v-if="showPosts" :items="posts"/>
             <div class="col-md-1"></div>
             <div class="col-md-4">
                 <QuickLinks :quickLinks="quickLinks"/>
@@ -18,10 +18,26 @@ import Social from './Social.vue';
 
 <script>
    export default {
-        props: {
-            posts: Object,
-            quickLinks: Object,
-            socials: Object,
+    data () {
+        return {
+            posts : [],
+            showPosts : false
         }
+    },
+    props: {
+        quickLinks: Object,
+        socials: Object,
+    },
+    created () {
+        this.getPosts().then((result) => {
+                this.posts = result.data.data
+                this.showPosts = true
+            })
+    },
+    methods : {
+      getPosts () {
+        return this.axios.get('http://myblog.test:90/api/latest-posts/3')
+      }
     }
+}
 </script>

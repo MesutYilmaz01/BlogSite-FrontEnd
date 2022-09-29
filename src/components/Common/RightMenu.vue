@@ -10,7 +10,7 @@ import PopularPosts from './RightMenu/PopularPosts.vue';
     <div class="col-md-12 col-lg-4 sidebar">
         <Textbox />
         <AboutRight :about="about"/>
-        <PopularPosts :posts="posts"/>
+        <PopularPosts v-if="showPosts" :posts="posts"/>
         <Categories :categories="categories"/>
         <Tags :tags="tags"/>
     </div>
@@ -21,6 +21,7 @@ import PopularPosts from './RightMenu/PopularPosts.vue';
   export default {
     data() {
         return {
+            showPosts: false,
             about: [
                 {
                     img: "images/person_1.jpg",
@@ -46,28 +47,7 @@ import PopularPosts from './RightMenu/PopularPosts.vue';
                     ]
                 }
             ],
-
-            posts: [
-                {
-                    img: "images/img_6.jpg",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3
-                },
-                {
-                    img: "images/img_6.jpg",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3
-                },
-                {
-                    img: "images/img_6.jpg",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3
-                },
-            ],
-
+            posts: [],
             categories: [
                 {
                     link: "#",
@@ -118,6 +98,17 @@ import PopularPosts from './RightMenu/PopularPosts.vue';
                 },
             ]
         };
+    },
+    created () {
+    this.getPosts().then((result) => {
+            this.posts = result.data.data
+            this.showPosts = true
+        })
+    },
+    methods : {
+      getPosts () {
+        return this.axios.get('http://myblog.test:90/api/popular-posts')
+      }
     }
 }
 </script>
