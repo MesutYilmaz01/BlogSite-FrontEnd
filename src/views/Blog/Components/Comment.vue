@@ -10,7 +10,6 @@ import Comment from './Comment.vue';
             <h3>{{ data.name_surname }}</h3>
             <div class="meta">{{ data.date}}</div>
             <p>{{ data.comment }}</p>
-            <p><a href="#" class="reply rounded">Reply</a></p>
         </div>
         <ul class="children" v-if="data.sub_comment" v-for="sub_comment in data.sub_comment">
             <Comment :data="sub_comment" />
@@ -22,7 +21,8 @@ import Comment from './Comment.vue';
     export default {
         name: "recursive-comment",
         props: {
-            data: Object
+            data: Object,
+            post: Object
         }
     }
 </script>

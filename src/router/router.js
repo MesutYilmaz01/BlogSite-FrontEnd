@@ -17,7 +17,7 @@ const routes = [
     component: () => import("@/views/About/Index.vue"),
   },
   {
-    path: "/category/:category",
+    path: "/?category=:category",
     name: "category",
     component: () => import("@/views/Category/Index.vue"),
   },
@@ -36,6 +36,10 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    // always scroll to top
+    return { top: 0 }
+  },
 });
 
 

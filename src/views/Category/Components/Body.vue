@@ -1,21 +1,21 @@
 <script setup>
 import RightMenu from '../../../components/Common/RightMenu.vue';
 import HorizontalPost from '../../../components/Common/Components/HorizontalPost.vue';
-</script>
+    </script>
 
 <template>
     <div class="container">
         <div class="row mb-4">
           <div class="col-md-6">
-            <h2 class="mb-4">{{title}} : {{ `${$route.params.category[0].toUpperCase()}${$route.params.category.slice(1)}` }}</h2>
-          </div>
+            <h2 class="mb-4">{{ staticKeys.staticKeys.categoryPageCategoryText }} : {{ `${$route.params.category[0].toUpperCase()}${$route.params.category.slice(1)}` }}</h2>
+        </div>
         </div>
             <div class="row blog-entries">
                 <div class="col-md-12 col-lg-8 main-content">
                     <div class="row mb-5 mt-5">
                         <div class="col-md-12">
-                            <div class="post-entry-horzontal" v-for="post in this.posts">
-                                <HorizontalPost :data="post"/>
+                            <div class="post-entry-horzontal" v-for="post in posts">
+                                <HorizontalPost :data="post" />
                             </div>
                         </div>
                         <!--Loading circle-->
@@ -31,83 +31,51 @@ import HorizontalPost from '../../../components/Common/Components/HorizontalPost
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
   export default {
     data() {
         return {
-            showLoader: true,
-            title : "Category",
-            posts : [
-                {
-                    link: "asdasd.com",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3,
-                    img: "images/img_6.jpg",
-                },
-                {
-                    link: "asdasd.com",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3,
-                    img: "images/img_6.jpg",
-                },
-                {
-                    link: "asdasd.com",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3,
-                    img: "images/img_6.jpg",
-                },
-                {
-                    link: "asdasd.com",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3,
-                    img: "images/img_6.jpg",
-                },
-                {
-                    link: "asdasd.com",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3,
-                    img: "images/img_6.jpg",
-                },
-                
-            ]
+            posts: [],
+            counter: 0,
+            showLoader: false,
+            isEmptyPost: false,
         }
     },
+    computed:{
+            ...mapGetters(
+                { staticKeys : 'staticKeys/getStaticKeys'}
+            )},   
     methods: {
         scrollTrigger() {
-            //this.post = this.getPosts;
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if(entry.intersectionRatio > 0 ) {
+                    if(this.counter <= this.posts.length) {
+                        if(entry.intersectionRatio > 0 ) {
                         this.showLoader = true;
-                        this.posts = this.posts.concat( [{
-                            link: "asdasd.com",
-                            author: "Mesut Yılmaz - ",
-                            title: "How to Find the Video Games of Your Youth",
-                            date: "March 15, 2018",
-                            commentCount: this.posts.length,
-                            img: "images/img_6.jpg",
-                        }])
-                        setTimeout( () => {
-                            this.showLoader = false;
-                        }, 2000)
+                        this.axios
+                        .get(`http://myblog.test:90/api/posts/category/${this.$route.params.category}/${this.counter}/10`)
+                        .then(
+                            (response) => {
+                            this.posts = this.posts.concat(response.data.data)
+                            this.counter+=10
+                            this.showLoader = false
+                            this.isEmptyPost = this.posts.length === 0 ? true : false
+                            }
+                            )
+                    }
                     }
                 })
             })
             observer.observe(this.$refs.infiniteScrollTrigger);
+        },
+        refreshPage() {
+            console.log('değişti...')
         }
     },
     mounted: function() {
         this.scrollTrigger();
     }
+
 }
 </script>
 
@@ -145,3 +113,6 @@ import HorizontalPost from '../../../components/Common/Components/HorizontalPost
     }
 
 </style>
+
+
+

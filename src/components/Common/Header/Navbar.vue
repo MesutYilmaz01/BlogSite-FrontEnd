@@ -3,12 +3,20 @@
         <div class="container">
             <div class="collapse navbar-collapse" id="navbarMenu">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item" :class="{dropdown : link.sublinks}" v-for="link in links">
-                        <router-link class="nav-link dropdown-toggle" v-if="link.sublinks" :to="link.link" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ link.text }}</router-link>
-                            <div class="dropdown-menu" v-if="link.sublinks" aria-labelledby="dropdown04">
-                               <router-link class="dropdown-item" :to="sublink.link" v-for="sublink in link.sublinks"> {{ sublink.text}}</router-link>
+                    <li class="nav-item">
+                        <router-link :to="{name:'index'}" class="nav-link" active-class="active" >{{ staticKeys.staticKeys.navBarMenuItem1 }}</router-link>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <router-link :to="{name:'category', params:{category: 'all'}}" active-class="active" class="nav-link dropdown-toggle" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> {{ staticKeys.staticKeys.navBarMenuItem2 }}</router-link>
+                            <div class="dropdown-menu" aria-labelledby="dropdown04">
+                               <router-link :to="{name:'category', params:{category: category.name}}" class="dropdown-item" v-for="category in categories" > {{category.name}} </router-link>
                             </div>
-                        <router-link class="nav-link" v-else :to="link.link">{{ link.text }}</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link :to="{name:'about'}" class="nav-link" active-class="active">{{ staticKeys.staticKeys.navBarMenuItem3 }}</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link :to="{name:'contact'}" class="nav-link" active-class="active">{{ staticKeys.staticKeys.navBarMenuItem4 }}</router-link>
                     </li>
                 </ul>
             </div>
@@ -17,49 +25,26 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
+    computed:{
+            ...mapGetters(
+                { staticKeys : 'staticKeys/getStaticKeys'}
+            )},   
         data() {
             return {
-                links: [
-                    {
-                        link: '/',
-                        text: 'Home',
-                        sublinks: null
-                    },
-                    {
-                        link: '/category/all',
-                        text: 'Categories',
-                        sublinks: [
-                            {
-                                link: '/category/europa',
-                                text: 'Europa'
-                            },
-                            {
-                                link: '/category/dubai',
-                                text: 'Dubai'
-                            },
-                            {
-                                link: '/category/europa',
-                                text: 'Afirica'
-                            },
-                            {
-                                link: '/category/europa',
-                                text: 'South'
-                            }
-                        ]
-                    },
-                    {
-                        link: '/about',
-                        text: 'About',
-                        sublinks: null
-                    },
-                    {
-                        link: '/contact',
-                        text: 'Contact',
-                        sublinks: null
-                    }
-                ]
+                categories: []
             }
-        }
+        },
+        created () {
+            this.getCategories().then((result) => {
+                this.categories = result.data.data
+            })
+        },
+        methods : {
+            getCategories () {
+                return this.axios.get('http://myblog.test:90/api/categories')
+        },
+    }
 }
 </script>

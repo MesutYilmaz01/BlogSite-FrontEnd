@@ -8,13 +8,13 @@ import RightMenu from "../../../components/Common/RightMenu.vue";
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h2 class="mb-4">{{ title }}</h2>
+                    <h2 class="mb-4">{{ staticKeys.staticKeys.indexPostsHeader }}</h2>
                 </div>
             </div>
             <div class="row blog-entries">
                 <div class="col-md-12 col-lg-8 main-content">
                     <div class="row">
-                        <h2 v-if="isEmptyPost">{{emptyPost}}</h2>
+                        <h2 v-if="isEmptyPost">{{staticKeys.staticKeys.indexPostHeaderNotExists}}</h2>
                         <div class="col-md-6" v-if="posts.length !== 0" v-for="item in posts">
                             <RectanglePost :data="item" />
                         </div>
@@ -32,17 +32,20 @@ import RightMenu from "../../../components/Common/RightMenu.vue";
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
   export default {
     data() {
         return {
             posts: [],
-            title: 'Latest Posts',
             counter: 0,
             showLoader: false,
             isEmptyPost: false,
-            emptyPost: 'Henüz hiçbir yazı yazılmamış.'
         }
     },
+    computed:{
+            ...mapGetters(
+                { staticKeys : 'staticKeys/getStaticKeys'}
+            )},   
     methods: {
         scrollTrigger() {
             const observer = new IntersectionObserver((entries) => {
@@ -51,7 +54,7 @@ import RightMenu from "../../../components/Common/RightMenu.vue";
                         if(entry.intersectionRatio > 0 ) {
                         this.showLoader = true;
                         this.axios
-                        .get('http://myblog.test:90/api/posts/'+this.counter)
+                        .get('http://myblog.test:90/api/latest-posts/'+this.counter+'/10')
                         .then(
                             (response) => {
                                 this.posts = this.posts.concat(response.data.data)
@@ -70,6 +73,7 @@ import RightMenu from "../../../components/Common/RightMenu.vue";
     mounted: function() {
         this.scrollTrigger();
     }
+
 }
 </script>
 <style scoped>

@@ -4,12 +4,12 @@ import QuickLinks from './QuickLinks.vue';
 import Social from './Social.vue';
 </script>
 <template>
-    <div class="col-md-6 ml-auto">
-        <div class="row">
+    <div class="col-md-8 ml-auto ">
+        <div class="row justify-content-end">
             <LatestPost v-if="showPosts" :items="posts"/>
             <div class="col-md-1"></div>
             <div class="col-md-4">
-                <QuickLinks :quickLinks="quickLinks"/>
+                <QuickLinks/>
                 <Social :socials="socials"/>
             </div>
         </div>
@@ -25,7 +25,6 @@ import Social from './Social.vue';
         }
     },
     props: {
-        quickLinks: Object,
         socials: Object,
     },
     created () {
@@ -36,7 +35,7 @@ import Social from './Social.vue';
     },
     methods : {
       getPosts () {
-        return this.axios.get('http://myblog.test:90/api/latest-posts/3')
+        return this.axios.get('http://myblog.test:90/api/latest-posts/0/3')
       }
     }
 }

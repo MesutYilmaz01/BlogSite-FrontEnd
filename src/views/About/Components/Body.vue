@@ -10,14 +10,14 @@ import HorizontalPost from '../../../components/Common/Components/HorizontalPost
                 <div class="col-md-12 col-lg-8 main-content">
                     <div class="row">
                         <div class="col-md-12">
-                            <h2 class="mb-4"> {{ title }}</h2>
-                            <p class="mb-5"><img :src="[img]" alt="Image placeholder" class="img-fluid"></p>
-                            {{ content }}
+                            <h2 class="mb-4"> {{ aboutMe.title }}</h2>
+                            <p class="mb-5"><img v-if="aboutMe.image" :src="[aboutMe.image]" alt="Image placeholder" class="w-50 p-3"></p>
+                            {{ aboutMe.content }}
                         </div>
                     </div>
                     <div class="row mb-5 mt-5">
                         <div class="col-md-12 mb-5">
-                            <h2> {{ postTitle }}</h2>
+                            <h2 v-if="staticKeys.staticKeys.aboutMeLatestPosts"> {{ staticKeys.staticKeys.aboutMeLatestPosts }}</h2>
                         </div>
                         <div class="col-md-12">
                             <div class="post-entry-horzontal" v-for="post in posts">
@@ -37,81 +37,56 @@ import HorizontalPost from '../../../components/Common/Components/HorizontalPost
 </template>
 
 <script>
+ import { mapGetters } from 'vuex';
   export default {
     data() {
         return {
-            postTitle: 'My Latest Posts',
-            title : "Hi There! I'm Craig David",
-            content : "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum minima eveniet recusandae suscipit eum laboriosam fugit amet deleniti iste et. Ad dolores, necessitatibus non saepe tenetur impedit commodi quibusdam natus repellat, exercitationem accusantium perferendis officiis. Laboriosam impedit quia minus pariatur!</p>",
-            img : "images/img_6.jpg",
-            posts: [
-                {
-                    link: "asdasd.com",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3,
-                    img: "images/img_6.jpg",
-                },
-                {
-                    link: "asdasd.com",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3,
-                    img: "images/img_6.jpg",
-                },
-                {
-                    link: "asdasd.com",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3,
-                    img: "images/img_6.jpg",
-                },
-                {
-                    link: "asdasd.com",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3,
-                    img: "images/img_6.jpg",
-                },
-                {
-                    link: "asdasd.com",
-                    author: "Mesut Yılmaz",
-                    title: "How to Find the Video Games of Your Youth",
-                    date: "March 15, 2018",
-                    commentCount: 3,
-                    img: "images/img_6.jpg",
-                },
-                
-            ],
+            posts: [],
+            counter: 0,
+            showLoader: false,
+            isEmptyPost: false,
+            aboutMe : [],
         }
     },
+    created () {
+            this.getCategories().then((result) => {
+                this.aboutMe = result.data
+            })
+    },
     methods: {
+        getCategories () {
+                return this.axios.get('http://myblog.test:90/api/about-me')
+        },
         scrollTrigger() {
-            //this.post = this.getPosts;
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if(entry.intersectionRatio > 0 ) {
+                    if(this.counter <= this.posts.length) {
+                        if(entry.intersectionRatio > 0 ) {
                         this.showLoader = true;
-                        this.posts = this.posts.concat( [{
-                            link: "asdasd.com",
-                            author: "Mesut Yılmaz - ",
-                            title: "How to Find the Video Games of Your Youth",
-                            date: "March 15, 2018",
-                            commentCount: this.posts.length,
-                            img: "images/img_6.jpg",
-                        }])
-                        setTimeout( () => {
-                            this.showLoader = false;
-                        }, 2000)
+                        this.axios
+                        .get('http://myblog.test:90/api/latest-posts/'+this.counter+'/10')
+                        .then(
+                            (response) => {
+                                this.posts = this.posts.concat(response.data.data)
+                            this.counter+=10
+                            this.showLoader = false
+                            this.isEmptyPost = this.posts.length === 0 ? true : false
+                            }
+                            )
+                    }
                     }
                 })
             })
             observer.observe(this.$refs.infiniteScrollTrigger);
         }
+    },
+    computed:{
+        ...mapGetters(
+            { staticKeys : 'staticKeys/getStaticKeys'}
+        ),
+        ...mapGetters(
+                { aboutMe : 'aboutMe/getAboutMe'}
+            )
     },
     mounted: function() {
         this.scrollTrigger();

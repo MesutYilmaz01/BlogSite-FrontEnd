@@ -1,6 +1,6 @@
 <template>
     <router-link v-if="data.slug" :to="{name:'blog', params:{slug: data.slug}}">
-        <img :src="[img]" alt="Image placeholder" class="mr-4">
+        <img v-if="data.coverImage" :src="[data.coverImage]" alt="Image placeholder" class="mr-4">
         <div class="text">
             <h4>{{data.title}}</h4>
             <div class="post-meta" v-if="data.comment">

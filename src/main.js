@@ -23,7 +23,8 @@ import 'owl.carousel'
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import store from './store/store.js'
 
 
 
-createApp(App).use(router).use(VueAxios, axios).mount('#app')
+createApp(App).use(router).use(VueAxios, axios).use(store).mount('#app')

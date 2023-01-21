@@ -46,12 +46,12 @@ import RightMenu from '../../../components/Common/RightMenu.vue';
               <h3 class="mb-5">{{comment_title}}</h3>
               <ul class="comment-list">
                 <div v-if="comments.length !== 0" v-for="comment in comments">
-                  <Comment :data="comment" />
+                  <Comment :data="comment"/>
                 </div>
               </ul>
               <!-- END comment-list -->
               
-              <Form />
+              <Form :post="this.post"/>
             </div>
                 </div>
             </div>

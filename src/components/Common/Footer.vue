@@ -8,7 +8,7 @@ import RightSide from './Footer/RightSide.vue';
         <div class="container">
             <div class="row mb-5">
                 <About :about="about"/>
-                <RightSide :quickLinks="quickLinks" :socials="socials"/>
+                <RightSide :socials="socials"/>
             </div>
         </div>
     </footer>
@@ -18,30 +18,6 @@ import RightSide from './Footer/RightSide.vue';
 export default {
     data() {
         return {
-            showPosts: false,
-            about: [
-                {
-                    header: 'About Us',
-                    img: 'images/img_1.jpg',
-                    text: 'Lorem ipsum dolor sit amet sa ksal sk sa, consectetur adipisicing elit. Ipsa harum inventore reiciendis.'
-                }
-            ],
-
-            quickLinks: [
-                {   
-                    title: 'About Us',
-                    link: 'asdasda.com'
-                }, 
-                { 
-                    title: 'About Us',
-                    link: 'asdasda.com'
-                }, 
-                { 
-                    title: 'About Us',
-                    link: 'asdasda.com'
-                }, 
-            ],
-
             socials: [
                 {
                     title: 'Twitter',
